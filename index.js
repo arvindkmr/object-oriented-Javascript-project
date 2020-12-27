@@ -9,11 +9,8 @@ class Book {
 
 class UI {
   static displayBooks() {
-    const StoredBooks = [
-      { title: "a", author: "a1", isbn: "1" },
-      { title: "b", author: "b2", isbn: "2" },
-    ];
-
+    const StoredBooks = store.getBooks();
+    console.log(StoredBooks);
     const books = StoredBooks;
     books.forEach((book) => UI.addBookToList(book));
   }
@@ -52,6 +49,34 @@ class UI {
 //UI class : handle UI tasks
 
 //store Class : store data of the UI and Local storage
+class store {
+  static getBooks() {
+    let books;
+    if (localStorage.getItem("books") === null) {
+      books = [];
+    } else {
+      books = JSON.parse(localStorage.getItem("books"));
+    }
+    return books;
+  }
+
+  static addBooks(book) {
+    const books = store.getBooks();
+    books.push(book);
+    localStorage.setItem("books", JSON.stringify(books));
+  }
+
+  static removeBooks(isbn) {
+    let books = store.getBooks();
+    books.forEach((book, index) => {
+      if (book.isbn === isbn) {
+        books.splice(index, 1);
+      }
+    });
+console.log('callsed')
+    localStorage.setItem("books", JSON.stringify(books));
+  }
+}
 
 //Events class : Display books => add books , delete books And Ui and local storage
 
@@ -71,19 +96,25 @@ document.querySelector("#book-form").addEventListener("submit", (e) => {
     UI.showAlert(" fill all the details", "danger");
   } else {
     UI.addBookToList(book);
-  }
 
-  //show alert for book added
-  UI.showAlert("Book Added", "success")
-  
-  //clear form for next input
-  document.getElementById("book-form").reset();
+    //show alert for book added
+    UI.showAlert("Book Added", "success");
+
+    //store class- addBooks
+    store.addBooks(book);
+
+    //clear form for next input
+    document.getElementById("book-form").reset();
+  }
 });
 
 document.querySelector("#book-list").addEventListener("click", (e) => {
   // handle the delete functionality
   UI.deleteBook(e.target);
-  
+
+  //store class - remove boks from storage
+  store.removeBooks(e.target.parentElement.previousElementSibling.textContent);
+
   //show remove alert
-  UI.showAlert("Book Removed", "info")
+  UI.showAlert("Book Removed", "info");
 });
