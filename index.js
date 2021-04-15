@@ -10,7 +10,7 @@ class Book {
 class UI {
   static displayBooks() {
     const StoredBooks = store.getBooks();
-    console.log(StoredBooks);
+    // console.log(StoredBooks);
     const books = StoredBooks;
     books.forEach((book) => UI.addBookToList(book));
   }
@@ -73,7 +73,6 @@ class store {
         books.splice(index, 1);
       }
     });
-console.log('callsed')
     localStorage.setItem("books", JSON.stringify(books));
   }
 }

@@ -1,4 +1,4 @@
-Website url : https://goofy-shockley-a55525.netlify.app
+Website url : https://js-oops-neog-camp.netlify.app/
 
 Object oriented javaScript project
 
